@@ -56,8 +56,8 @@
 `exit`: 退出交互式命令行
 可以使用`help <指令>`获取指令的相应用法
 ## 文件目录解释
-下图列出本项目的核心结构：
-.
+下图列出本项目的核心结构：  
+.  
 │  automove_file.py	可执行，根据FinalLabel.xls将./dataset/all/下的图片分配  
 │  config.json 命令交互系统的配置文件  
 │  FinalLabel.xls 标签表  
@@ -87,10 +87,10 @@
 │  ├─saved_model 保存的模型  
 │  
 └─SVM_Kernel 非线性SVM文件夹  
-    │  Demo.py 可执行，演示文件  
-    │  KernelSVM_model.py 不可执行可调用，非线性SVM结构文件  
-    │  test.py 可执行，测试文件  
-    │  train.py 可执行，训练文件  
-    │  utils.py 可执行，图片预处理  
-    │  
-    └─saved_model 保存的模型  
+│  │  Demo.py 可执行，演示文件  
+│  │  KernelSVM_model.py 不可执行可调用，非线性SVM结构文件  
+│  │  test.py 可执行，测试文件  
+│  │  train.py 可执行，训练文件  
+│  │  utils.py 可执行，图片预处理  
+│  │  
+│  └─saved_model 保存的模型  
