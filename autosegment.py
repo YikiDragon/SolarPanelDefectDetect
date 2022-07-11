@@ -3,7 +3,7 @@ import cv2
 import pathlib
 
 if __name__ == '__main__':
-    all = False
+    all = True
     save_dir = "./dataset/all/"
     data_root = pathlib.Path('./photos')
     all_image_names = sorted(
