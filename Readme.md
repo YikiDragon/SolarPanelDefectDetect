@@ -18,43 +18,81 @@
 ## 获取代码
 
 可以以下通过git指令获取代码：  
-`git clone https://github.com/YikiDragon/SolarPanelDefectDetect.git`
+```
+git clone https://github.com/YikiDragon/SolarPanelDefectDetect.git
+```
 
 ## 环境依赖
 
 可以通过输入以下指令以满足最基本配置：  
-`conda install tensorflow==2.3.0 opencv==4.5.1 numpy matplotlib alive_progress cmd`  
+```
+conda install tensorflow==2.3.0 opencv==4.5.1 numpy matplotlib alive_progress cmd
+```  
 或者在获取代码后在代码根目录输入：  
-`conda env create -f require.yaml`
+```
+conda env create -f require.yaml
+```
 
 ## 目录配置
-在获取代码后，在根目录下新建文件夹`photos`用于存放待校正分割的光伏电池板原图。  
-## 快速使用
-1. 在项目根目录下运行以下指令进入命令交互界面  
-`python main.py`  
+在获取代码后，在根目录下新建文件夹`photos`  
+```
+mkdir photos
+```  
+在`photos`文件夹中存放待校正分割的光伏电池板原图。
+>光伏电池板原图须为".jpg"或".JPG"
+## 快速使用交互式命令行检测
+1. 在项目根目录下运行以下指令启动交互式命令行   
+```
+python main.py
+```  
 2. 查看可用文件夹列表  
-`show folder`  
+```
+show folder
+```  
 3. 选择`photos`文件夹  
-`set folder photos`或`set folder <文件夹对应编号>`
+```
+set folder photos
+```
+或`set folder <文件夹对应编号>`
 4. 查看可用图片文件  
-`show image`
+```
+show image
+```
 5. 选择***.jpg图片  
-`set image ***.jpg`或`set image <图片对应编号>`
+```
+set image ***.jpg
+```
+或`set image <图片对应编号>`
 6. 查看可用缺陷识别模型  
-`show model`
+```
+show model
+```
 7. 选择非线性SVM模型  
-`set model SVM`或`set model <模型对应编号>`
+```
+set model SVM
+```
+或`set model <模型对应编号>`
 8. 开始检测  
-`detect`
+```
+detect
+```
 ## 指令说明
-有以下指令可用：
+有以下指令可用：  
 `show`: 显示可用选项  
 `set`: 设置指定选项  
 `detect`: 开始检测  
 `help`: 帮助  
 `about`: 作者信息  
-`exit`: 退出交互式命令行
-可以使用`help <指令>`获取指令的相应用法
+`exit`: 退出交互式命令行  
+>可以使用`help <指令>`获取指令的相应用法
+## 模型训练
+1. 新建数据集文件夹`dataset`  
+```
+mkdir dataset  
+cd dataset
+```
+
+2. 
 ## 文件目录解释
 下图列出本项目的核心结构：  
 .  

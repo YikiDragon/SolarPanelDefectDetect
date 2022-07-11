@@ -128,7 +128,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
     :param trough_th:           波谷判别阈值，用于确定分割位置(弃用)
     :param seg_method:          分割方法，0-纯波谷分割，1-平均分割， 2-均值间隔探测波谷， 3-均值间隔+波谷， 4-FFT频谱分析
     :param debug:               调试开关
-    :return: segmentations      列表，每个元素格式为[[起始点坐标，终止点坐标], 分割图]
+    :return: segmentations      列表，每个元素格式为[[起始点坐标，终止点坐标], 分割图, 晶片行列编号]
     '''
     img = np.array([])
     # 缩小到1/5
@@ -219,7 +219,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                 img_segment = image_corrected[trough_row[i]:trough_row[i + 1], trough_col[j]:trough_col[j + 1], :]
                 segmentations.append(
                     [np.array([[trough_col[j], trough_row[i]], [trough_col[j + 1], trough_row[i + 1]]], np.int32),
-                     img_segment])
+                     img_segment, np.array([i+1, j+1])])
         if debug:
             plt.title("Debug demo")
             plt.imshow(copy)
@@ -271,7 +271,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                                          (0, 255, 0), 10)
                 img_segment = image_corrected[start_height:end_height, start_width:end_width, :]
                 segmentations.append(
-                    [np.array([[start_width, start_height], [end_width, end_height]], np.int32), img_segment])
+                    [np.array([[start_width, start_height], [end_width, end_height]], np.int32), img_segment, np.array([i+1, j+1])])
         if debug:
             plt.title("Debug demo")
             plt.imshow(copy)
@@ -331,7 +331,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                 img_segment = image_corrected[trough_row[i]:trough_row[i + 1], trough_col[j]:trough_col[j + 1], :]
                 segmentations.append(
                     [np.array([[trough_col[j], trough_row[i]], [trough_col[j + 1], trough_row[i + 1]]], np.int32),
-                     img_segment])
+                     img_segment, np.array([i+1, j+1])])
         if debug:
             plt.title("Debug demo")
             plt.imshow(copy)
@@ -417,7 +417,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                 img_segment = image_corrected[trough_row[i]:trough_row[i + 1], trough_col[j]:trough_col[j + 1], :]
                 segmentations.append(
                     [np.array([[trough_col[j], trough_row[i]], [trough_col[j + 1], trough_row[i + 1]]], np.int32),
-                     img_segment])
+                     img_segment, np.array([i+1, j+1])])
         if debug:
             plt.title("Debug demo")
             plt.imshow(copy)
@@ -484,7 +484,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                 img_segment = image_corrected[trough_row[i]:trough_row[i + 1], trough_col[j]:trough_col[j + 1], :]
                 segmentations.append(
                     [np.array([[trough_col[j], trough_row[i]], [trough_col[j + 1], trough_row[i + 1]]], np.int32),
-                     img_segment])
+                     img_segment, np.array([i+1, j+1])])
         if debug:
             plt.title("Segmentation diagram")
             plt.imshow(copy)
@@ -507,8 +507,8 @@ if __name__ == '__main__':
         image = '41191510617617.JPG'
         print("image name: "+image)
         img_src = cv2.imread("photos/" + image)
-        image_corrected = correct(img_src, debug=True)
-        seg = segment(image_corrected, seg_method=4, debug=True)
+        image_corrected = correct(img_src, debug=False)
+        seg = segment(image_corrected, seg_method=4, debug=False)
         copy = image_corrected.copy()
     elif all:
         i = 1
