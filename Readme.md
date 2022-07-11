@@ -48,7 +48,7 @@ show folder
 ```
 set folder photos
 ```
-或`set folder <文件夹对应编号>`
+或`set folder <文件夹对应编号>`  
 4. 查看可用图片文件  
 ```
 show image
@@ -57,7 +57,7 @@ show image
 ```
 set image ***.jpg
 ```
-或`set image <图片对应编号>`
+或`set image <图片对应编号>`  
 6. 查看可用缺陷识别模型  
 ```
 show model
@@ -66,7 +66,7 @@ show model
 ```
 set model SVM
 ```
-或`set model <模型对应编号>`
+或`set model <模型对应编号>`  
 8. 开始检测  
 ```
 detect
@@ -124,7 +124,7 @@ cd DenseNet
 ```
 python train.py
 ```
->一些详细的配置(例如: 优化器, BatchSize, Iterations, Epochs等)可以在train.py中修改
+>一些详细的配置(例如: 优化器, BatchSize, Iterations, Epochs等)可以在`train.py`中修改
 3. 生成Precision-Recall曲线并计算AP
 ```
 python test.py
