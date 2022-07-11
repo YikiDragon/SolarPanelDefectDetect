@@ -34,7 +34,7 @@ conda env create -f require.yaml
 mkdir photos
 ```  
 在`photos`文件夹中存放未校正分割的光伏电池板原图。
->光伏电池板原图须为".jpg"或".JPG"
+>光伏电池板原图须为".jpg"或".JPG"  
 ### 使用交互式命令行检测
 1. 在项目根目录下运行以下指令启动交互式命令行   
 ```
@@ -133,7 +133,7 @@ python test.py
 ```
 python Demo.py
 ```
-## 关键函数调用方法
+### 关键函数调用方法
 1. 图像校正
 ```
 from image_utils.py import correct
