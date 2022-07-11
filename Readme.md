@@ -114,7 +114,7 @@ python label_convert.py
 ```
 生成的自定义标签表在`LabelList.xls`
 
-### 训练
+### 模型训练
 在`dataset/train/perfect`和`dataset/train/damaged`不为空的情况下，可以进行模型训练。
 1. 进入检测模型文件夹例如:
 ```
@@ -133,7 +133,7 @@ python test.py
 ```
 python Demo.py
 ```
-## 程序中关键函数调用方法
+## 关键函数调用方法
 1. 图像校正
 ```
 from image_utils.py import correct
