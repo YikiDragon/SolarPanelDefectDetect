@@ -19,7 +19,10 @@ def correct(image: np.ndarray, hist_th=25, approx_eps=0.01, debug=False):
     hist = cv2.calcHist([gray], [0], None, [256], [0, 255])
     if debug:
         plt.title("ColorHist")
+        plt.xlabel("grayscale")
+        plt.ylabel("pixel number")
         plt.plot(hist)
+        plt.savefig("./saved_plot/GrayscaleImageHistogram.pdf", dpi=300, format="pdf", bbox_inches='tight', pad_inches=0.0)
         plt.show()
     threshold = (hist_th + np.argmax(hist[hist_th:255]) - np.argmax(hist[0:hist_th])) / 3 + np.argmax(
         hist[0:hist_th])  # 以直方图中的双波峰中点为二值化阈值
@@ -49,10 +52,14 @@ def correct(image: np.ndarray, hist_th=25, approx_eps=0.01, debug=False):
         return False
     if debug:
         plt.imshow(opening, cmap=plt.get_cmap('gray'))
+        plt.savefig("./saved_plot/Binarization.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
         temp = image.copy()
         res = cv2.drawContours(temp, [approx], 0, (255, 0, 0), 30)
         plt.imshow(res)
+        plt.savefig("./saved_plot/ContourApproximation.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
     # approx = np.concatenate([approx[:, :, 1], approx[:, :, 0]], axis=-1)        # x,y 坐标顺序调整成张量行列顺序
     approx = np.reshape(approx, [4, 2])
@@ -108,6 +115,8 @@ def correct(image: np.ndarray, hist_th=25, approx_eps=0.01, debug=False):
         plt.xticks([])
         plt.yticks([])
         plt.imshow(img_K)
+        plt.savefig("./saved_plot/EffectBeforeAndAfterCorrection.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
     return img_K
 
@@ -140,20 +149,27 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
     wave_row = np.sum(opening_row, axis=1) / opening_row.shape[1]
     if debug:
         plt.imshow(thres, plt.cm.get_cmap('gray'))
+        plt.savefig("./saved_plot/AdaptiveBinarization.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
         plt.subplot(121)
-        plt.xlabel("opening_col")
+        plt.xlabel("Opening_col")
         plt.imshow(opening_col, plt.cm.gray)
         plt.subplot(122)
-        plt.xlabel("opening_row")
+        plt.xlabel("Opening_row")
         plt.imshow(opening_row, plt.cm.gray)
+        plt.savefig("./saved_plot/HorizontalAndVerticalClosureOperation.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
-        # plt.title("wave_col")
+        plt.title("Row and column waveform")
+        plt.xlabel("Row and column index")
+        plt.ylabel("Average gray scale")
         plt.plot(wave_col)
-        # plt.title("wave_row")
         plt.plot(wave_row)
         plt.plot(trough_th)
         plt.legend(["wave_col", "wave_row"])
+        plt.savefig("./saved_plot/RowAndColumnWaveform.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                    pad_inches=0.0)
         plt.show()
     # 以100为阈值，获取波谷序号
     # trough_row = np.where(wave_row < trough_th)[0]
@@ -430,6 +446,10 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
         if debug:
             plt.legend(["wave_row", "wave_col"])
             plt.title("FFT Spectrum analysis diagram")
+            plt.xlabel("Row and column index")
+            plt.ylabel("Amplitude")
+            plt.savefig("./saved_plot/FFTSpectrumAnalysisDiagram.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                        pad_inches=0.0)
             plt.show()
         # 确保行列数均是偶数
         if row_num.astype(np.int32) % 2 != 0:
@@ -466,8 +486,10 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
                     [np.array([[trough_col[j], trough_row[i]], [trough_col[j + 1], trough_row[i + 1]]], np.int32),
                      img_segment])
         if debug:
-            plt.title("Debug demo")
+            plt.title("Segmentation diagram")
             plt.imshow(copy)
+            plt.savefig("./saved_plot/SegmentationDiagram.pdf", dpi=300, format="pdf", bbox_inches='tight',
+                        pad_inches=0.0)
             plt.show()
         return segmentations
 
@@ -476,7 +498,7 @@ def segment(image_corrected: np.ndarray, trough_th=200, seg_method=0, debug=Fals
 
 
 if __name__ == '__main__':
-    all = True
+    all = False
     data_root = pathlib.Path('./photos')
     all_image_names = sorted(
         item.name for item in data_root.glob('*.JPG'))  # 获取文件名
@@ -485,24 +507,17 @@ if __name__ == '__main__':
         image = '41191510617617.JPG'
         print("image name: "+image)
         img_src = cv2.imread("photos/" + image)
-        image_corrected = correct(img_src, debug=False)
-        seg = segment(image_corrected, seg_method=4, debug=False)
+        image_corrected = correct(img_src, debug=True)
+        seg = segment(image_corrected, seg_method=4, debug=True)
         copy = image_corrected.copy()
-        for seg_ele in seg:
-            copy = cv2.rectangle(copy, tuple(seg_ele[0][0]), tuple(seg_ele[0][1]), (0, 255, 0), 10)
-        plt.xlabel(image)
-        plt.xticks([])
-        plt.yticks([])
-        plt.imshow(copy)
-        plt.show()
     elif all:
         i = 1
         for image in all_image_names:
             plt.subplot(2, 3, i)
             print("image name: " + image)
             img_src = cv2.imread("photos/" + image)
-            image_corrected = correct(img_src, debug=False)
-            seg = segment(image_corrected, seg_method=4, debug=False)
+            image_corrected = correct(img_src, debug=True)
+            seg = segment(image_corrected, seg_method=4, debug=True)
             copy = image_corrected.copy()
             for seg_ele in seg:
                 copy = cv2.rectangle(copy, tuple(seg_ele[0][0]), tuple(seg_ele[0][1]), (0, 255, 0), 10)
