@@ -504,11 +504,11 @@ if __name__ == '__main__':
         item.name for item in data_root.glob('*.JPG'))  # 获取文件名
     if not all:
         # image = random.choice(all_image_names)
-        image = '41191510617617.JPG'
+        image = 'E181273K0569.jpg'
         print("image name: "+image)
         img_src = cv2.imread("photos/" + image)
-        image_corrected = correct(img_src, debug=False)
-        seg = segment(image_corrected, seg_method=4, debug=False)
+        image_corrected = correct(img_src, debug=True)
+        seg = segment(image_corrected, seg_method=4, debug=True)
         copy = image_corrected.copy()
     elif all:
         i = 1

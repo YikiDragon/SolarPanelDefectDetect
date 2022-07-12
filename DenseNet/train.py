@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     train = True       # 是否训练
     test = True         # 是否测试
-    EPOCHS = 50  # 世代数，遍历全部训练集的次数
+    EPOCHS = 75  # 世代数，遍历全部训练集的次数
     batch_size = 32  # 批大小，batch训练集大小
     Itertion = 60  # 迭代数，训练集内更新权重的次数（batch数）
     image_size = [195, 195]
@@ -133,6 +133,7 @@ if __name__ == '__main__':
                         epoch, str(percent) + '%', (image_i + 1), total, train_speed, loss), end='\r')
         # 保存模型与优化器参数
         Model.save("./saved_model/my_model")  # 保存模型
+        print("model saved")
         # with open("optimizer.data", "wb") as saved_optimizer:
         #     pickle.dump(optimizer, saved_optimizer)  # 保存优化器
         #     print("saved: optimizer")

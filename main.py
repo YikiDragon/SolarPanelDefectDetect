@@ -1,6 +1,8 @@
 import cmd
 import pathlib
 import os
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # tf不打印调试信息
 import json
 import time
 import sys
@@ -87,7 +89,8 @@ class DetectConsole(cmd.Cmd):
                 elif arg[1] == '1' or arg[1] == 'DenseNet':  # DenseNet模型
                     self.conf['model'] = 'DenseNet'  # 模型为1
                     ###### DenseNet ######
-                    print(time.strftime("%Y-%m-%d %H:%M:%S ") + "INFO: Loading detection model: DenseNet Please Wait...")
+                    print(
+                        time.strftime("%Y-%m-%d %H:%M:%S ") + "INFO: Loading detection model: DenseNet Please Wait...")
                     self.Model = tf.keras.models.load_model(DenseNet_path)  # 加载模型
                     print(time.strftime("%Y-%m-%d %H:%M:%S ") + "INFO: Change detection model to: DenseNet")
                     self.updatePrompt()  # 更新指示符
@@ -135,7 +138,7 @@ class DetectConsole(cmd.Cmd):
     def do_detect(self, arg):
         'Detection command: start detection after setting pictures and models'
         debug = False
-        if arg=="debug":
+        if arg == "debug":
             debug = True
         if self.conf['image'] != "":  # 图片存在且已加载
             start_time = time.time()
@@ -161,17 +164,20 @@ class DetectConsole(cmd.Cmd):
                     if conclusion == 0:  # 检测到缺陷
                         damaged_num += 1  # 缺陷数+1
                         # draw_image = cv2.rectangle(draw_image, tuple(point[0]), tuple(point[1]), (255, 0, 0), 10)     # 框选缺陷
-                        draw_image = cv2.drawMarker(draw_image, tuple(((point[0]+point[1])/2).astype(np.int32)), (255, 0, 0), markerType=1, markerSize=100, thickness=10)  # 缺陷画叉
+                        draw_image = cv2.drawMarker(draw_image, tuple(((point[0] + point[1]) / 2).astype(np.int32)),
+                                                    (255, 0, 0), markerType=1, markerSize=100, thickness=10)  # 缺陷画叉
                     """
                     代码
                     """
-            print("\033[1;32m" + time.strftime("%Y-%m-%d %H:%M:%S ") + "DETECT: completed Time: {:.3f}s".format(time.time()-start_time) + "\033[0m")
+            print("\033[1;32m" + time.strftime("%Y-%m-%d %H:%M:%S ") + "DETECT: completed Time: {:.3f}s".format(
+                time.time() - start_time) + "\033[0m")
             print("---------------------------------------------------------------------------------------------------")
             print("Detect report:")
-            print("File name: "+self.conf['image'])
+            print("File name: " + self.conf['image'])
             print("slices_num: {}\n".format(slices_num) + "\033[1;32m" +
                   "perfect_num: {}\n".format(slices_num - damaged_num) + "\033[0m" + "\033[1;31m" +
-                  "damaged_num: {}\ndamaged_rate: {:.3f}%".format(damaged_num, damaged_num / slices_num * 100) + "\033[0m")
+                  "damaged_num: {}\ndamaged_rate: {:.3f}%".format(damaged_num,
+                                                                  damaged_num / slices_num * 100) + "\033[0m")
             print("---------------------------------------------------------------------------------------------------")
             plt.subplot(121)
             plt.xlabel("Corrected")
@@ -197,6 +203,7 @@ class DetectConsole(cmd.Cmd):
     def default(self, line):
         print(
             "\033[1;33m" + time.strftime("%Y-%m-%d %H:%M:%S ") + "WARNING: Unknown command" + "\033[0m")
+
     def emptyline(self):
         print(
             "\033[1;33m" + time.strftime("%Y-%m-%d %H:%M:%S ") + "WARNING: Command cannot be empty" + "\033[0m")

@@ -19,7 +19,7 @@ if __name__ == '__main__':
                             (40, 40),  # blockStride
                             (40, 40),  # cellSize
                             9)  # nbins
-    test_num = 8592  # 8592
+    test_num = 8520  # 8592
     test_data_list = get_dataset('../dataset/train', shuffle=False)  # 数据列表获取
     current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     train_log_dir = 'logs/gradient_tape/' + current_time + '/train'
