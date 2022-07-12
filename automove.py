@@ -14,10 +14,13 @@ labels = table.col_values(3)[1:]
 for i, name in enumerate(file_names):
     label = labels[i]
     src_path = src_dir + name + '.jpg'
-    if label == 0:  # 完好
-        dst_path = perfect_dir + name + '.jpg'
-        shutil.move(src_path, dst_path)
-    elif label == 1:  # 损坏
-        dst_path = damaged_dir + name + '.jpg'
-        shutil.move(src_path, dst_path)
+    try:
+        if label == 0:  # 完好
+            dst_path = perfect_dir + name + '.jpg'
+            shutil.move(src_path, dst_path)
+        elif label == 1:  # 损坏
+            dst_path = damaged_dir + name + '.jpg'
+            shutil.move(src_path, dst_path)
+    except:
+        print("Missing file: "+name+".jpg")
 print('move completed!')

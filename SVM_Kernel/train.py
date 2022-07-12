@@ -20,9 +20,9 @@ if __name__ == '__main__':
                             9)  # nbins
 
     train = True
-    test = False
-    # update_num = None     # 无限循环
-    update_num = 1000    # 更新次数
+    test = True
+    update_num = None     # 无限循环
+    # update_num = 1000    # 更新次数
     # loss_th = -10.0
     C = 5              # 松弛因子
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
@@ -72,18 +72,17 @@ if __name__ == '__main__':
                     zip(tape.gradient(loss, SVM.trainable_variables), SVM.trainable_variables))
                 train_loss_recorder(loss)   # 记录损失
                 if not test:
-                    print('loss: {:.3f}, please wait...'.format(loss), end='\r')
+                    print('ord:{}, loss: {:.3f}, please wait...'.format(update_ord, loss), end='\n')
                 if test:
                     """
                     测试
                     """
                     pred = SVM(data_x)
-                    true_num = tf.reduce_sum(tf.where(tf.sign(tf.transpose(pred)) == data_y, 1, 0))
+                    true_num = tf.reduce_sum(tf.where(tf.sign(pred) == data_y, 1, 0))
                     accuracy = true_num / sum(train_PD_num) * 100
-                    print('loss: {:.3f}, accuracy: {:.3f} please wait...'.format(loss, accuracy), end='\r')
+                    print('ord:{}, loss: {:.3f}, accuracy: {:.3f} please wait...'.format(update_ord, loss, accuracy), end='\n')
                 with train_summary_writer.as_default():
                     tf.summary.scalar('loss', train_loss_recorder.result(), step=update_ord)
-                print('ord:{}, loss: {:.3f}, please wait...'.format(update_ord, loss), end='\r')
 
             SVM.save("./saved_model/my_model")  # 保存模型
             print("Model saved")
@@ -97,32 +96,23 @@ if __name__ == '__main__':
                     loss = loss_func(SVM, C)
                 optimizer.apply_gradients(
                     zip(tape.gradient(loss, SVM.trainable_variables), SVM.trainable_variables))
-                if not test:
-                    print('loss: {:.3f}, please wait...'.format(loss), end='\r')
-                if test:
-                    """
-                    测试
-                    """
-                    pred = SVM(data_x)
-                    true_num = tf.reduce_sum(tf.where(tf.sign(tf.transpose(pred)) == data_y, 1, 0))
-                    accuracy = true_num / sum(train_PD_num) * 100
-                    print('loss: {:.3f}, accuracy: {:.3f} please wait...'.format(loss, accuracy), end='\r')
-                    if accuracy == 100:
-                        # 保存模型与优化器参数
-                        SVM.save("./saved_model/my_model")  # 保存模型
-                        with open("./saved_model/optimizer.data", "wb") as saved_optimizer:
-                            pickle.dump(optimizer, saved_optimizer)  # 保存优化器
-                        print("Test accuracy Satisfied")
-                        sys.exit()
+                """
+                测试
+                """
+                pred = SVM(data_x)
+                true_num = tf.reduce_sum(tf.where(tf.sign(pred) == data_y, 1, 0))
+                accuracy = true_num / sum(train_PD_num) * 100
+                print('loss: {:.3f}, accuracy: {:.3f} please wait...'.format(loss, accuracy), end='\r')
+                if accuracy == 100:
+                    # 保存模型与优化器参数
+                    SVM.save("./saved_model/my_model")  # 保存模型
+                    with open("./saved_model/optimizer.data", "wb") as saved_optimizer:
+                        pickle.dump(optimizer, saved_optimizer)  # 保存优化器
+                    print("Test accuracy Satisfied")
+                    sys.exit()
                 # if loss < loss_th:
                 #     print('LastTime: loss: {:.3f}, finished'.format(loss), end='\r')
                 #     break
-            SVM.save("./saved_model/my_model")  # 保存模型
-            print("Model saved")
-            with open("./saved_model/optimizer.data", "wb") as saved_optimizer:
-                pickle.dump(optimizer, saved_optimizer)  # 保存优化器
-                print("optimizer_weights saved")
-
             # 保存模型与优化器参数
 
     # with open("optimizer.data", "wb") as saved_optimizer:

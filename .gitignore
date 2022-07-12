@@ -1,3 +1,11 @@
 /saved_plot/
 /dataset/
 /photos/
+/SVM_Kernel/saved_model_temp/
+/SVM_Kernel/plot/
+/SVM_Kernel/logs/
+/result/
+/logs/
+/DenseNet/logs/
+/DenseNet/plot/
+/DenseNet/saved_model_temp/
